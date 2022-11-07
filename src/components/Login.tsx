@@ -1,112 +1,106 @@
 import React from "react";
 import "./styles.css";
-class Login extends React.Component<any, any> {
+import * as Yup from 'yup';
+import { ErrorMessage, Field, Form, Formik } from "formik";
+
+class Login extends React.Component<any,any> {
   constructor(props: any) {
     super(props);
-
-    this.state = {
-      fields: {
-        email: '',
-        password: ''
-      },
-      errors: {
-        email: ''
-      },
-    };
+  this.handleSubmit = this.handleSubmit.bind(this);
   }
-
-  handleChange(field: any, e: any) {
-    let fields = this.state.fields;
-    fields[field] = e.target.value;
-    this.setState({ fields });
-  }
+  // handleChange(field: any, e: any) {
+  //   let fields = this.state.fields;
+  //   fields[field] = e.target.value;
+  //   this.setState({ fields });
+  // }
 
   handleSubmit(e: any) {
-    e.preventDefault();
-    if (this.handleValidation()) {
-      console.log(this.state.fields);
-      alert("Form submitted");
-    } else {
-      return;
-    }
+   console.log(e);
   }
 
-  handleValidation() {
-    let fields = this.state.fields;
-    let errors = this.state.errors;
-    let formIsValid = true;
-
-    //Email
-    if (!fields.email) {
-      formIsValid = false;
-      errors.email = "Email cannot be empty";
-    }
-
-    // if (typeof fields.email !== "undefined") {
-    //   let lastAtPos = fields.email.lastIndexOf("@");
-    //   let lastDotPos = fields.email.lastIndexOf(".");
-
-    //   if (
-    //     !(
-    //       lastAtPos < lastDotPos &&
-    //       lastAtPos > 0 &&
-    //       fields.email.indexOf("@@") == -1 &&
-    //       lastDotPos > 2 &&
-    //       fields.email.length - lastDotPos > 2
-    //     )
-    //   ) {
-    //     formIsValid = false;
-    //     errors.email = "Email is not valid";
-    //   }
-    // }
-
-    this.setState({ errors: errors });
-    return formIsValid;
+  validationSchema() {
+    return Yup.object().shape({
+      email: Yup.string()
+        .required('Email is required')
+        .email('Email is invalid'),
+      password: Yup.string()
+        .required('Password is required')
+        .min(8, 'Password must be at least 8 characters')
+    });
   }
 
+   
   render() {
+     const initialValues = {
+      email: '',
+      password: '',
+    };
     return (
       <div className="wrapper">
         <div className="form-wrapper">
           <h2>Login</h2>
-          <form
-            name="loginForm"
-            className="loginForm"
-            onSubmit={this.handleSubmit.bind(this)}
+          <Formik
+          initialValues={initialValues}
+          validationSchema={this.validationSchema}
+          onSubmit={this.handleSubmit}
+        >
+          {({ errors, touched }) => (
+          <Form
+            name="registerForm"
+            className="registerForm"
           >
             <div className="email">
               <label htmlFor="email">Email</label>
-              <input
+              <Field
                 type="text"
                 placeholder="Enter Email"
                 name="email"
-                value={this.state.fields.email}
-                onChange={this.handleChange.bind(this, "email")}
+                className={
+                    'form-control' +
+                    (errors.email && touched.email ? ' is-invalid' : '')
+                  }
+                // value={this.state.fields.email}
+                // onChange={this.handleChange.bind(this, "email")}
               />
-              <span className="error">{this.state.errors.email}</span>
+               <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="invalid-feedback"
+                />
             </div>
             <div className="password">
               <label htmlFor="password">Password</label>
-              <input
+              <Field
                 type="text"
                 placeholder="Enter Password"
                 name="password"
-                value={this.state.fields.password}
-                onChange={this.handleChange.bind(this, "password")}
+                 className={
+                    'form-control' +
+                    (errors.password && touched.password ? ' is-invalid' : '')
+                  }
+                // value={this.state.fields.password}
+                // onChange={this.handleChange.bind(this, "password")}
               />
+              <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="invalid-feedback"
+                />
             </div>
             <div className="submit">
               <button type="submit" id="submit" value="Submit">
                 Submit
               </button>
-              <br></br>
-              <div className="a">
-                <span>
+              {/* <br></br> */}
+            </div>
+            <div className="a">
+               <span>
                   Don`t have an account?<a href="/register">SignUp.</a>
                 </span>
               </div>
-            </div>
-          </form>
+          </Form>
+          )}
+          </Formik>
         </div>
       </div>
     );
