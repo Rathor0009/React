@@ -1,15 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-class Home extends React.Component {
+export default class Home extends React.Component {
   render() {
     return (
       <div>
         <nav>
           <ul>
-            <li>
-              <Link to={"/"}>Home</Link>
-            </li>
             <li>
               <Link to={"/login"}>Login</Link>
             </li>
@@ -22,5 +19,3 @@ class Home extends React.Component {
     );
   }
 }
-
-export default Home;

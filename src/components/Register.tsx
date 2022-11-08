@@ -3,16 +3,11 @@ import "./styles.css";
 import * as Yup from 'yup';
 import { ErrorMessage, Field, Form, Formik } from "formik";
 
-class Register extends React.Component<any,any> {
+export default class Register extends React.Component<any,any> {
   constructor(props: any) {
     super(props);
   this.handleSubmit = this.handleSubmit.bind(this);
   }
-  // handleChange(field: any, e: any) {
-  //   let fields = this.state.fields;
-  //   fields[field] = e.target.value;
-  //   this.setState({ fields });
-  // }
 
   handleSubmit(e: any) {
    console.log(e);
@@ -172,4 +167,3 @@ class Register extends React.Component<any,any> {
     );
   }
 }
-export default Register;
